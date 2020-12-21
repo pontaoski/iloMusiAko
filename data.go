@@ -3,6 +3,12 @@ package main
 import "math/rand"
 
 var letterData = []string{"k", "l", "m", "n", "p", "s", "t", "w", "j", "a", "e", "i", "o", "u"}
+var particles = map[string]struct{}{
+	"li": {},
+	"e":  {},
+	"la": {},
+	"pi": {},
+}
 
 func randomLetter() string {
 	return letterData[rand.Intn(len(letterData))]

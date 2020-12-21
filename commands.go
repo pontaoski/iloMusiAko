@@ -77,13 +77,21 @@ func dataPhase(c *gateway.MessageCreateEvent) {
 	}
 
 	fields := strings.Fields(c.Content)
+	fieldsWithoutParticles := []string{}
 
-	if len(fields) != len(dataStates[c.ChannelID].letters) {
+	for _, field := range fields {
+		if _, ok := particles[field]; ok {
+			continue
+		}
+		fieldsWithoutParticles = append(fieldsWithoutParticles, field)
+	}
+
+	if len(fieldsWithoutParticles) != len(dataStates[c.ChannelID].letters) {
 		return
 	}
 
-	for i := 0; i < len(fields); i++ {
-		fieldsFirst := fields[i][0:1]
+	for i := 0; i < len(fieldsWithoutParticles); i++ {
+		fieldsFirst := fieldsWithoutParticles[i][0:1]
 		letter := dataStates[c.ChannelID].letters[i]
 
 		if strings.ToLower(fieldsFirst) != letter {
