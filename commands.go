@@ -36,7 +36,7 @@ type sendData struct {
 	phrases map[discord.UserID][]string
 }
 
-const duration = 3
+const duration = 70
 
 func votePhase(c *gateway.MessageCreateEvent) {
 	if c.WebhookID.IsValid() {
