@@ -15,7 +15,7 @@ func randomLetter() string {
 }
 
 func randomLength() int {
-	return rand.Intn(4) + 2
+	return rand.Intn(3) + 2
 }
 
 func randomLetters() []string {
