@@ -6,13 +6,27 @@ import (
 	"os/signal"
 	"syscall"
 
+	"iloMusiAko/ent"
+
 	"github.com/diamondburned/arikawa/session"
+	_ "github.com/mattn/go-sqlite3"
 )
 
 var bot *session.Session
+var client *ent.Client
 
 func main() {
 	var err error
+
+	client, err = ent.Open("sqlite3", "file:data.db?mode=memory&cache=shared&_fk=1")
+	if err != nil {
+		log.Fatalf("failed opening connection to sqlite: %v", err)
+	}
+	defer client.Close()
+
+	if err = client.Schema.Create(ctx); err != nil {
+		log.Fatalf("failed creating schema resources: %v", err)
+	}
 
 	bot, err = session.New("Bot " + botConfig.Bot.Token)
 	if err != nil {

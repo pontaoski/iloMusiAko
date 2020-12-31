@@ -1,7 +1,10 @@
 package main
 
 import (
+	"context"
 	"fmt"
+	"iloMusiAko/ent"
+	"iloMusiAko/ent/user"
 	"math/rand"
 	"strconv"
 	"strings"
@@ -21,6 +24,7 @@ const (
 var gameStates = map[discord.ChannelID]state{}
 var voteStates = map[discord.ChannelID]voteData{}
 var dataStates = map[discord.ChannelID]sendData{}
+var ctx = context.Background()
 
 type voteData struct {
 	votes    map[discord.UserID]int
@@ -32,7 +36,7 @@ type sendData struct {
 	phrases map[discord.UserID][]string
 }
 
-const duration = 60
+const duration = 3
 
 func votePhase(c *gateway.MessageCreateEvent) {
 	if c.WebhookID.IsValid() {
@@ -64,6 +68,7 @@ func votePhase(c *gateway.MessageCreateEvent) {
 	voteStates[c.ChannelID].hasVoted[c.Author.ID] = struct{}{}
 
 	bot.DeleteMessage(c.ChannelID, c.ID)
+	bot.SendMessage(c.ChannelID, fmt.Sprintf("<@%d> li toki e wile ona!", c.Author.ID), nil)
 }
 
 var punctuationStripper = strings.NewReplacer(
@@ -191,7 +196,20 @@ func startGame(c *gateway.MessageCreateEvent) {
 				return
 			}
 
-			bot.SendMessage(c.ChannelID, fmt.Sprintf("jan mute li wile toki pi <@%d>! ona li toki e ni: %s", winner, strings.Join(phraseData.phrases[winner], " ")), nil)
+			user, err := client.User.Query().Where(user.DiscordID(uint64(winner))).Only(ctx)
+			if err != nil {
+				if _, ok := err.(*ent.NotFoundError); ok {
+					user = client.User.Create().
+						SetDiscordID(uint64(winner)).
+						SaveX(ctx)
+				} else {
+					panic(err)
+				}
+			}
+
+			count := user.Update().AddWonGames(1).SaveX(ctx).WonGames
+
+			bot.SendMessage(c.ChannelID, fmt.Sprintf("jan mute li wile toki pi <@%d>! ona li toki e ni: %s. ni li tenpo nanpa %d tawa ona.", winner, strings.Join(phraseData.phrases[winner], " "), count), nil)
 		}()
 	}()
 }
