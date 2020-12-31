@@ -66,6 +66,15 @@ func votePhase(c *gateway.MessageCreateEvent) {
 	bot.DeleteMessage(c.ChannelID, c.ID)
 }
 
+var punctuationStripper = strings.NewReplacer(
+	",", "",
+	".", "",
+	";", "",
+	":", "",
+	"!", "",
+	".", "",
+)
+
 func dataPhase(c *gateway.MessageCreateEvent) {
 	if c.WebhookID.IsValid() {
 		return
@@ -80,7 +89,7 @@ func dataPhase(c *gateway.MessageCreateEvent) {
 	fieldsWithoutParticles := []string{}
 
 	for _, field := range fields {
-		if _, ok := particles[field]; ok {
+		if _, ok := particles[punctuationStripper.Replace(field)]; ok {
 			continue
 		}
 		fieldsWithoutParticles = append(fieldsWithoutParticles, field)
