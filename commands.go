@@ -144,6 +144,11 @@ func startGame(c *gateway.MessageCreateEvent) {
 	}
 
 	go func() {
+		go func() {
+			time.Sleep(0.2 * duration * time.Second)
+			bot.SendMessage(c.ChannelID, "tenpo li weka!", nil)
+		}()
+
 		time.Sleep(duration * time.Second)
 		gameStates[c.ChannelID] = voting
 
@@ -174,6 +179,11 @@ func startGame(c *gateway.MessageCreateEvent) {
 		bot.SendMessage(c.ChannelID, s.String(), nil)
 
 		go func() {
+			go func() {
+				time.Sleep(0.2 * duration * time.Second)
+				bot.SendMessage(c.ChannelID, "tenpo li weka!", nil)
+			}()
+
 			time.Sleep(duration * time.Second)
 			delete(gameStates, c.ChannelID)
 
