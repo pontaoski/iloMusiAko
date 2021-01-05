@@ -145,7 +145,7 @@ func startGame(c *gateway.MessageCreateEvent) {
 
 	go func() {
 		go func() {
-			time.Sleep(0.2 * duration * time.Second)
+			time.Sleep(0.8 * duration * time.Second)
 			bot.SendMessage(c.ChannelID, "tenpo li weka!", nil)
 		}()
 
@@ -180,7 +180,7 @@ func startGame(c *gateway.MessageCreateEvent) {
 
 		go func() {
 			go func() {
-				time.Sleep(0.2 * duration * time.Second)
+				time.Sleep(0.8 * duration * time.Second)
 				bot.SendMessage(c.ChannelID, "tenpo li weka!", nil)
 			}()
 
