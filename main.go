@@ -18,7 +18,7 @@ var client *ent.Client
 func main() {
 	var err error
 
-	client, err = ent.Open("sqlite3", "file:data.db?mode=memory&cache=shared&_fk=1")
+	client, err = ent.Open("sqlite3", "file:data.db?cache=shared&_fk=1")
 	if err != nil {
 		log.Fatalf("failed opening connection to sqlite: %v", err)
 	}
