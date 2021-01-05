@@ -149,6 +149,8 @@ func startGame(c *gateway.MessageCreateEvent) {
 
 		if len(dataStates[c.ChannelID].phrases) == 0 {
 			bot.SendMessage(c.ChannelID, "jan ala li pana e toki ona! ike a...", nil)
+			delete(gameStates, c.ChannelID)
+
 			return
 		}
 
@@ -192,6 +194,7 @@ func startGame(c *gateway.MessageCreateEvent) {
 
 			if winner == 0 {
 				bot.SendMessage(c.ChannelID, "jan ala li toki e wile sina. ike a...", nil)
+				delete(gameStates, c.ChannelID)
 
 				return
 			}
