@@ -78,6 +78,12 @@ func votePhase(c *gateway.MessageCreateEvent) {
 		return
 	}
 
+	if c.Author.ID == id {
+		bot.SendMessage(c.ChannelID, fmt.Sprintf("ugh, <@%d> is a FOOKIN cheater!", c.Author.ID), nil)
+		bot.DeleteMessage(c.ChannelID, c.ID)
+		return
+	}
+
 	count, _ := voteStates[c.ChannelID].votes[id]
 
 	voteStates[c.ChannelID].votes[id] = count + 1
@@ -225,7 +231,9 @@ func startGame(c *gateway.MessageCreateEvent) {
 			votes := -1
 
 			for user, voted := range voteData.votes {
-				if voted > votes {
+				_, ok := voteStates[c.ChannelID].hasVoted[user]
+
+				if voted > votes && ok {
 					winner = user
 				}
 			}
