@@ -79,7 +79,7 @@ func votePhase(c *gateway.MessageCreateEvent) {
 	}
 
 	if c.Author.ID == id {
-		bot.SendMessage(c.ChannelID, fmt.Sprintf("ugh, <@%d> is a FOOKIN cheater!", c.Author.ID), nil)
+		bot.SendMessage(c.ChannelID, fmt.Sprintf("ike a, <@%d> li pali ike!", c.Author.ID), nil)
 		bot.DeleteMessage(c.ChannelID, c.ID)
 		return
 	}
