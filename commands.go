@@ -109,6 +109,12 @@ func dataPhase(c *gateway.MessageCreateEvent) {
 	fields := strings.Fields(c.Content)
 	fieldsWithoutParticles := []string{}
 
+	if strings.ContainsRune(c.Content, '⠀') {
+		bot.SendMessage(c.ChannelID, fmt.Sprintf("<@%d> o, sitelen ni li ike MUTE a! o kepeken ALA e ona!", c.Author.ID), nil)
+		bot.DeleteMessage(c.ChannelID, c.ID)
+		return
+	}
+
 	if dataStates[c.ChannelID].searchAlreadyHas(fields) {
 		bot.SendMessage(c.ChannelID, fmt.Sprintf("<@%d> o, jan ante li kepeken toki sina. o toki ante!", c.Author.ID), nil)
 		bot.DeleteMessage(c.ChannelID, c.ID)
