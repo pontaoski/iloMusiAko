@@ -110,7 +110,7 @@ func dataPhase(c *gateway.MessageCreateEvent) {
 	fieldsWithoutParticles := []string{}
 
 	if dataStates[c.ChannelID].searchAlreadyHas(fields) {
-		bot.SendMessage(c.ChannelID, fmt.Sprintf("<%d> o, jan ante li kepeken toki sina. o toki ante!", c.Author.ID), nil)
+		bot.SendMessage(c.ChannelID, fmt.Sprintf("<@%d> o, jan ante li kepeken toki sina. o toki ante!", c.Author.ID), nil)
 		bot.DeleteMessage(c.ChannelID, c.ID)
 		return
 	}
