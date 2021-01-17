@@ -36,6 +36,22 @@ type sendData struct {
 	phrases map[discord.UserID][]string
 }
 
+func (s sendData) searchAlreadyHas(p []string) bool {
+outer:
+	for _, phrase := range s.phrases {
+		if len(phrase) != len(p) {
+			continue
+		}
+		for i := range phrase {
+			if phrase[i] != p[i] {
+				continue outer
+			}
+		}
+		return true
+	}
+	return false
+}
+
 const duration = 70
 
 func votePhase(c *gateway.MessageCreateEvent) {
@@ -92,6 +108,12 @@ func dataPhase(c *gateway.MessageCreateEvent) {
 
 	fields := strings.Fields(c.Content)
 	fieldsWithoutParticles := []string{}
+
+	if dataStates[c.ChannelID].searchAlreadyHas(fields) {
+		bot.SendMessage(c.ChannelID, fmt.Sprintf("<%d> o, jan ante li kepeken toki sina. o toki ante!", c.Author.ID), nil)
+		bot.DeleteMessage(c.ChannelID, c.ID)
+		return
+	}
 
 	for _, field := range fields {
 		if _, ok := particles[punctuationStripper.Replace(field)]; ok {
