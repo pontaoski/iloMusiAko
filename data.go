@@ -2,7 +2,7 @@ package main
 
 import "math/rand"
 
-var letterData = []string{"k", "l", "m", "n", "p", "s", "t", "w", "j", "a", "e", "i", "o", "u"}
+var letterData = []string{"k", "l", "m", "n", "p", "s", "t", "w", "j", "a", "e", "i", "o", "u", "k", "l", "m", "n", "p", "s", "t", "w", "j", "a", "e", "i", "o", "u", "k", "l", "m", "n", "p", "s", "t", "w", "j", "a", "e", "i", "o", "u", "y"}
 var particles = map[string]struct{}{
 	"li": {},
 	"e":  {},
