@@ -219,13 +219,13 @@ func startGame(c *gateway.MessageCreateEvent) {
 			}()
 
 			time.Sleep(duration * time.Second)
-			delete(gameStates, c.ChannelID)
+			defer delete(gameStates, c.ChannelID)
 
 			voteData := voteStates[c.ChannelID]
 			phraseData := dataStates[c.ChannelID]
 
-			delete(dataStates, c.ChannelID)
-			delete(voteStates, c.ChannelID)
+			defer delete(dataStates, c.ChannelID)
+			defer delete(voteStates, c.ChannelID)
 
 			winner := discord.UserID(0)
 			couldWinner := discord.UserID(0)
