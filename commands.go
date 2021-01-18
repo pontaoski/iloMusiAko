@@ -271,7 +271,7 @@ func startGame(c *gateway.MessageCreateEvent) {
 				if couldVotes <= votes {
 					bot.SendMessage(c.ChannelID, "", ike("jan ala li toki e wile ona. ike a...", ""))
 				} else {
-					bot.SendMessage(c.ChannelID, "", meso(fmt.Sprintf("tenpo ante la <@%d> li ken pona, taso ona li toki ala e wile ona. jan li toki ala e wile tawa jan ante.", couldWinner), ""))
+					bot.SendMessage(c.ChannelID, "", meso("", fmt.Sprintf("tenpo ante la <@%d> li ken pona, taso ona li toki ala e wile ona. jan li toki ala e wile tawa jan ante.", couldWinner)))
 				}
 				delete(gameStates, c.ChannelID)
 
@@ -292,9 +292,9 @@ func startGame(c *gateway.MessageCreateEvent) {
 			count := user.Update().AddWonGames(1).SaveX(ctx).WonGames
 
 			if couldVotes <= votes {
-				bot.SendMessage(c.ChannelID, "", pona(fmt.Sprintf("jan mute li wile toki pi <@%d>! ona li toki e ni: %s. ni li tenpo nanpa %d tawa ona.", winner, strings.Join(phraseData.phrases[winner], " "), count), ""))
+				bot.SendMessage(c.ChannelID, "", pona("", fmt.Sprintf("jan mute li wile toki pi <@%d>!\nona li toki e ni: %s.\nni li tenpo nanpa %d tawa ona.", winner, strings.Join(phraseData.phrases[winner], " "), count)))
 			} else {
-				bot.SendMessage(c.ChannelID, "", pona(fmt.Sprintf("jan mute li wile toki pi <@%d>! ona li toki e ni: %s. ni li tenpo nanpa %d tawa ona. tenpo ante la <@%d> li ken pona, taso ona li toki ala e wile ona.", winner, strings.Join(phraseData.phrases[winner], " "), count, couldWinner), ""))
+				bot.SendMessage(c.ChannelID, "", pona("", fmt.Sprintf("jan mute li wile toki pi <@%d>!\nona li toki e ni: %s.\nni li tenpo nanpa %d tawa ona.\ntenpo ante la <@%d> li ken pona, taso ona li toki ala e wile ona.", winner, strings.Join(phraseData.phrases[winner], " "), count, couldWinner)))
 			}
 		}()
 	}()
