@@ -52,7 +52,7 @@ outer:
 	return false
 }
 
-const duration = 10
+const duration = 70
 
 func votePhase(c *gateway.MessageCreateEvent) {
 	if c.WebhookID.IsValid() {
@@ -101,6 +101,10 @@ var punctuationStripper = strings.NewReplacer(
 	"!", "",
 	".", "",
 )
+
+func pona(s string) *discord.Embed {
+	return &discord.Embed{}
+}
 
 func dataPhase(c *gateway.MessageCreateEvent) {
 	if c.WebhookID.IsValid() {
@@ -235,11 +239,13 @@ func startGame(c *gateway.MessageCreateEvent) {
 			for user, voted := range voteData.votes {
 				_, ok := voteStates[c.ChannelID].hasVoted[user]
 
-				if couldVotes > votes {
+				if voted > couldVotes {
 					couldWinner = user
+					couldVotes = voted
 				}
 				if voted > votes && ok {
 					winner = user
+					votes = voted
 				}
 			}
 
