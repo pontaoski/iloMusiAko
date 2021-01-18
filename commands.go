@@ -228,28 +228,18 @@ func startGame(c *gateway.MessageCreateEvent) {
 			delete(voteStates, c.ChannelID)
 
 			winner := discord.UserID(0)
-			couldWinner := discord.UserID(0)
 			votes := -1
-			couldVotes := -1
 
 			for user, voted := range voteData.votes {
 				_, ok := voteStates[c.ChannelID].hasVoted[user]
 
-				if couldVotes > votes {
-					couldWinner = user
-				}
 				if voted > votes && ok {
 					winner = user
-					couldWinner = 0
 				}
 			}
 
 			if winner == 0 {
-				if couldWinner == 0 {
-					bot.SendMessage(c.ChannelID, "jan ala li toki e wile sina. ike a...", nil)
-				} else {
-					bot.SendMessage(c.ChannelID, fmt.Sprintf("tenpo ante la <@%d> li ken pona, taso ona li toki ala e wile ona. jan li toki ala e wile tawa jan ante.", couldWinner), nil)
-				}
+				bot.SendMessage(c.ChannelID, "jan ala li toki e wile sina. ike a...", nil)
 				delete(gameStates, c.ChannelID)
 
 				return
@@ -268,11 +258,7 @@ func startGame(c *gateway.MessageCreateEvent) {
 
 			count := user.Update().AddWonGames(1).SaveX(ctx).WonGames
 
-			if couldWinner == 0 {
-				bot.SendMessage(c.ChannelID, fmt.Sprintf("jan mute li wile toki pi <@%d>! ona li toki e ni: %s. ni li tenpo nanpa %d tawa ona.", winner, strings.Join(phraseData.phrases[winner], " "), count), nil)
-			} else {
-				bot.SendMessage(c.ChannelID, fmt.Sprintf("jan mute li wile toki pi <@%d>! ona li toki e ni: %s. ni li tenpo nanpa %d tawa ona. tenpo ante la <@%d> li ken pona, taso ona li toki ala e wile ona.", winner, strings.Join(phraseData.phrases[winner], " "), count, couldWinner), nil)
-			}
+			bot.SendMessage(c.ChannelID, fmt.Sprintf("jan mute li wile toki pi <@%d>! ona li toki e ni: %s. ni li tenpo nanpa %d tawa ona.", winner, strings.Join(phraseData.phrases[winner], " "), count), nil)
 		}()
 	}()
 }
