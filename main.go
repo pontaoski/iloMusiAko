@@ -36,6 +36,7 @@ func main() {
 	bot.AddHandler(startGame)
 	bot.AddHandler(dataPhase)
 	bot.AddHandler(votePhase)
+	bot.AddHandler(leaderboard)
 
 	if err := bot.Open(); err != nil {
 		log.Fatalf("%+v", err)

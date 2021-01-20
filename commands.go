@@ -175,6 +175,35 @@ func dataPhase(c *gateway.MessageCreateEvent) {
 	bot.DeleteMessage(c.ChannelID, c.ID)
 }
 
+func leaderboard(c *gateway.MessageCreateEvent) {
+	if c.WebhookID.IsValid() {
+		return
+	}
+
+	if !strings.HasPrefix(c.Content, "ilo o leaderboard") {
+		return
+	}
+
+	users := client.User.Query().
+		Order(ent.Desc(user.FieldWonGames)).
+		Limit(10).
+		AllX(ctx)
+
+	sb := []string{}
+
+	for _, user := range users {
+		sb = append(sb, fmt.Sprintf("<@%d> - tenpo %d", user.DiscordID, user.WonGames))
+	}
+
+	bot.SendMessage(
+		c.ChannelID, "",
+		pona(
+			"jan mute li wile e toki pi jan ni:",
+			strings.Join(sb, "\n"),
+		),
+	)
+}
+
 func startGame(c *gateway.MessageCreateEvent) {
 	if c.WebhookID.IsValid() {
 		return
