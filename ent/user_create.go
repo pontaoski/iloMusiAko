@@ -25,16 +25,44 @@ func (uc *UserCreate) SetDiscordID(u uint64) *UserCreate {
 	return uc
 }
 
-// SetWonGames sets the WonGames field.
-func (uc *UserCreate) SetWonGames(u uint64) *UserCreate {
-	uc.mutation.SetWonGames(u)
+// SetGames sets the Games field.
+func (uc *UserCreate) SetGames(u uint64) *UserCreate {
+	uc.mutation.SetGames(u)
 	return uc
 }
 
-// SetNillableWonGames sets the WonGames field if the given value is not nil.
-func (uc *UserCreate) SetNillableWonGames(u *uint64) *UserCreate {
+// SetNillableGames sets the Games field if the given value is not nil.
+func (uc *UserCreate) SetNillableGames(u *uint64) *UserCreate {
 	if u != nil {
-		uc.SetWonGames(*u)
+		uc.SetGames(*u)
+	}
+	return uc
+}
+
+// SetPoints sets the Points field.
+func (uc *UserCreate) SetPoints(u uint64) *UserCreate {
+	uc.mutation.SetPoints(u)
+	return uc
+}
+
+// SetNillablePoints sets the Points field if the given value is not nil.
+func (uc *UserCreate) SetNillablePoints(u *uint64) *UserCreate {
+	if u != nil {
+		uc.SetPoints(*u)
+	}
+	return uc
+}
+
+// SetRating sets the Rating field.
+func (uc *UserCreate) SetRating(u uint64) *UserCreate {
+	uc.mutation.SetRating(u)
+	return uc
+}
+
+// SetNillableRating sets the Rating field if the given value is not nil.
+func (uc *UserCreate) SetNillableRating(u *uint64) *UserCreate {
+	if u != nil {
+		uc.SetRating(*u)
 	}
 	return uc
 }
@@ -91,9 +119,17 @@ func (uc *UserCreate) SaveX(ctx context.Context) *User {
 
 // defaults sets the default values of the builder before save.
 func (uc *UserCreate) defaults() {
-	if _, ok := uc.mutation.WonGames(); !ok {
-		v := user.DefaultWonGames
-		uc.mutation.SetWonGames(v)
+	if _, ok := uc.mutation.Games(); !ok {
+		v := user.DefaultGames
+		uc.mutation.SetGames(v)
+	}
+	if _, ok := uc.mutation.Points(); !ok {
+		v := user.DefaultPoints
+		uc.mutation.SetPoints(v)
+	}
+	if _, ok := uc.mutation.Rating(); !ok {
+		v := user.DefaultRating
+		uc.mutation.SetRating(v)
 	}
 }
 
@@ -102,8 +138,14 @@ func (uc *UserCreate) check() error {
 	if _, ok := uc.mutation.DiscordID(); !ok {
 		return &ValidationError{Name: "DiscordID", err: errors.New("ent: missing required field \"DiscordID\"")}
 	}
-	if _, ok := uc.mutation.WonGames(); !ok {
-		return &ValidationError{Name: "WonGames", err: errors.New("ent: missing required field \"WonGames\"")}
+	if _, ok := uc.mutation.Games(); !ok {
+		return &ValidationError{Name: "Games", err: errors.New("ent: missing required field \"Games\"")}
+	}
+	if _, ok := uc.mutation.Points(); !ok {
+		return &ValidationError{Name: "Points", err: errors.New("ent: missing required field \"Points\"")}
+	}
+	if _, ok := uc.mutation.Rating(); !ok {
+		return &ValidationError{Name: "Rating", err: errors.New("ent: missing required field \"Rating\"")}
 	}
 	return nil
 }
@@ -140,13 +182,29 @@ func (uc *UserCreate) createSpec() (*User, *sqlgraph.CreateSpec) {
 		})
 		_node.DiscordID = value
 	}
-	if value, ok := uc.mutation.WonGames(); ok {
+	if value, ok := uc.mutation.Games(); ok {
 		_spec.Fields = append(_spec.Fields, &sqlgraph.FieldSpec{
 			Type:   field.TypeUint64,
 			Value:  value,
-			Column: user.FieldWonGames,
+			Column: user.FieldGames,
 		})
-		_node.WonGames = value
+		_node.Games = value
+	}
+	if value, ok := uc.mutation.Points(); ok {
+		_spec.Fields = append(_spec.Fields, &sqlgraph.FieldSpec{
+			Type:   field.TypeUint64,
+			Value:  value,
+			Column: user.FieldPoints,
+		})
+		_node.Points = value
+	}
+	if value, ok := uc.mutation.Rating(); ok {
+		_spec.Fields = append(_spec.Fields, &sqlgraph.FieldSpec{
+			Type:   field.TypeUint64,
+			Value:  value,
+			Column: user.FieldRating,
+		})
+		_node.Rating = value
 	}
 	return _node, _spec
 }

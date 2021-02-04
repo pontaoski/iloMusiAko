@@ -17,8 +17,12 @@ type User struct {
 	ID int `json:"id,omitempty"`
 	// DiscordID holds the value of the "DiscordID" field.
 	DiscordID uint64 `json:"DiscordID,omitempty"`
-	// WonGames holds the value of the "WonGames" field.
-	WonGames uint64 `json:"WonGames,omitempty"`
+	// Games holds the value of the "Games" field.
+	Games uint64 `json:"Games,omitempty"`
+	// Points holds the value of the "Points" field.
+	Points uint64 `json:"Points,omitempty"`
+	// Rating holds the value of the "Rating" field.
+	Rating uint64 `json:"Rating,omitempty"`
 }
 
 // scanValues returns the types for scanning values from sql.Rows.
@@ -26,7 +30,9 @@ func (*User) scanValues() []interface{} {
 	return []interface{}{
 		&sql.NullInt64{}, // id
 		&sql.NullInt64{}, // DiscordID
-		&sql.NullInt64{}, // WonGames
+		&sql.NullInt64{}, // Games
+		&sql.NullInt64{}, // Points
+		&sql.NullInt64{}, // Rating
 	}
 }
 
@@ -48,9 +54,19 @@ func (u *User) assignValues(values ...interface{}) error {
 		u.DiscordID = uint64(value.Int64)
 	}
 	if value, ok := values[1].(*sql.NullInt64); !ok {
-		return fmt.Errorf("unexpected type %T for field WonGames", values[1])
+		return fmt.Errorf("unexpected type %T for field Games", values[1])
 	} else if value.Valid {
-		u.WonGames = uint64(value.Int64)
+		u.Games = uint64(value.Int64)
+	}
+	if value, ok := values[2].(*sql.NullInt64); !ok {
+		return fmt.Errorf("unexpected type %T for field Points", values[2])
+	} else if value.Valid {
+		u.Points = uint64(value.Int64)
+	}
+	if value, ok := values[3].(*sql.NullInt64); !ok {
+		return fmt.Errorf("unexpected type %T for field Rating", values[3])
+	} else if value.Valid {
+		u.Rating = uint64(value.Int64)
 	}
 	return nil
 }
@@ -80,8 +96,12 @@ func (u *User) String() string {
 	builder.WriteString(fmt.Sprintf("id=%v", u.ID))
 	builder.WriteString(", DiscordID=")
 	builder.WriteString(fmt.Sprintf("%v", u.DiscordID))
-	builder.WriteString(", WonGames=")
-	builder.WriteString(fmt.Sprintf("%v", u.WonGames))
+	builder.WriteString(", Games=")
+	builder.WriteString(fmt.Sprintf("%v", u.Games))
+	builder.WriteString(", Points=")
+	builder.WriteString(fmt.Sprintf("%v", u.Points))
+	builder.WriteString(", Rating=")
+	builder.WriteString(fmt.Sprintf("%v", u.Rating))
 	builder.WriteByte(')')
 	return builder.String()
 }

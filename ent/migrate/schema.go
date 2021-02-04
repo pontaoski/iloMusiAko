@@ -12,7 +12,9 @@ var (
 	UsersColumns = []*schema.Column{
 		{Name: "id", Type: field.TypeInt, Increment: true},
 		{Name: "discord_id", Type: field.TypeUint64, Unique: true},
-		{Name: "won_games", Type: field.TypeUint64},
+		{Name: "games", Type: field.TypeUint64},
+		{Name: "points", Type: field.TypeUint64},
+		{Name: "rating", Type: field.TypeUint64},
 	}
 	// UsersTable holds the schema information for the "users" table.
 	UsersTable = &schema.Table{

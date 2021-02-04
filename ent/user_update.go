@@ -39,24 +39,66 @@ func (uu *UserUpdate) AddDiscordID(u uint64) *UserUpdate {
 	return uu
 }
 
-// SetWonGames sets the WonGames field.
-func (uu *UserUpdate) SetWonGames(u uint64) *UserUpdate {
-	uu.mutation.ResetWonGames()
-	uu.mutation.SetWonGames(u)
+// SetGames sets the Games field.
+func (uu *UserUpdate) SetGames(u uint64) *UserUpdate {
+	uu.mutation.ResetGames()
+	uu.mutation.SetGames(u)
 	return uu
 }
 
-// SetNillableWonGames sets the WonGames field if the given value is not nil.
-func (uu *UserUpdate) SetNillableWonGames(u *uint64) *UserUpdate {
+// SetNillableGames sets the Games field if the given value is not nil.
+func (uu *UserUpdate) SetNillableGames(u *uint64) *UserUpdate {
 	if u != nil {
-		uu.SetWonGames(*u)
+		uu.SetGames(*u)
 	}
 	return uu
 }
 
-// AddWonGames adds u to WonGames.
-func (uu *UserUpdate) AddWonGames(u uint64) *UserUpdate {
-	uu.mutation.AddWonGames(u)
+// AddGames adds u to Games.
+func (uu *UserUpdate) AddGames(u uint64) *UserUpdate {
+	uu.mutation.AddGames(u)
+	return uu
+}
+
+// SetPoints sets the Points field.
+func (uu *UserUpdate) SetPoints(u uint64) *UserUpdate {
+	uu.mutation.ResetPoints()
+	uu.mutation.SetPoints(u)
+	return uu
+}
+
+// SetNillablePoints sets the Points field if the given value is not nil.
+func (uu *UserUpdate) SetNillablePoints(u *uint64) *UserUpdate {
+	if u != nil {
+		uu.SetPoints(*u)
+	}
+	return uu
+}
+
+// AddPoints adds u to Points.
+func (uu *UserUpdate) AddPoints(u uint64) *UserUpdate {
+	uu.mutation.AddPoints(u)
+	return uu
+}
+
+// SetRating sets the Rating field.
+func (uu *UserUpdate) SetRating(u uint64) *UserUpdate {
+	uu.mutation.ResetRating()
+	uu.mutation.SetRating(u)
+	return uu
+}
+
+// SetNillableRating sets the Rating field if the given value is not nil.
+func (uu *UserUpdate) SetNillableRating(u *uint64) *UserUpdate {
+	if u != nil {
+		uu.SetRating(*u)
+	}
+	return uu
+}
+
+// AddRating adds u to Rating.
+func (uu *UserUpdate) AddRating(u uint64) *UserUpdate {
+	uu.mutation.AddRating(u)
 	return uu
 }
 
@@ -148,18 +190,46 @@ func (uu *UserUpdate) sqlSave(ctx context.Context) (n int, err error) {
 			Column: user.FieldDiscordID,
 		})
 	}
-	if value, ok := uu.mutation.WonGames(); ok {
+	if value, ok := uu.mutation.Games(); ok {
 		_spec.Fields.Set = append(_spec.Fields.Set, &sqlgraph.FieldSpec{
 			Type:   field.TypeUint64,
 			Value:  value,
-			Column: user.FieldWonGames,
+			Column: user.FieldGames,
 		})
 	}
-	if value, ok := uu.mutation.AddedWonGames(); ok {
+	if value, ok := uu.mutation.AddedGames(); ok {
 		_spec.Fields.Add = append(_spec.Fields.Add, &sqlgraph.FieldSpec{
 			Type:   field.TypeUint64,
 			Value:  value,
-			Column: user.FieldWonGames,
+			Column: user.FieldGames,
+		})
+	}
+	if value, ok := uu.mutation.Points(); ok {
+		_spec.Fields.Set = append(_spec.Fields.Set, &sqlgraph.FieldSpec{
+			Type:   field.TypeUint64,
+			Value:  value,
+			Column: user.FieldPoints,
+		})
+	}
+	if value, ok := uu.mutation.AddedPoints(); ok {
+		_spec.Fields.Add = append(_spec.Fields.Add, &sqlgraph.FieldSpec{
+			Type:   field.TypeUint64,
+			Value:  value,
+			Column: user.FieldPoints,
+		})
+	}
+	if value, ok := uu.mutation.Rating(); ok {
+		_spec.Fields.Set = append(_spec.Fields.Set, &sqlgraph.FieldSpec{
+			Type:   field.TypeUint64,
+			Value:  value,
+			Column: user.FieldRating,
+		})
+	}
+	if value, ok := uu.mutation.AddedRating(); ok {
+		_spec.Fields.Add = append(_spec.Fields.Add, &sqlgraph.FieldSpec{
+			Type:   field.TypeUint64,
+			Value:  value,
+			Column: user.FieldRating,
 		})
 	}
 	if n, err = sqlgraph.UpdateNodes(ctx, uu.driver, _spec); err != nil {
@@ -193,24 +263,66 @@ func (uuo *UserUpdateOne) AddDiscordID(u uint64) *UserUpdateOne {
 	return uuo
 }
 
-// SetWonGames sets the WonGames field.
-func (uuo *UserUpdateOne) SetWonGames(u uint64) *UserUpdateOne {
-	uuo.mutation.ResetWonGames()
-	uuo.mutation.SetWonGames(u)
+// SetGames sets the Games field.
+func (uuo *UserUpdateOne) SetGames(u uint64) *UserUpdateOne {
+	uuo.mutation.ResetGames()
+	uuo.mutation.SetGames(u)
 	return uuo
 }
 
-// SetNillableWonGames sets the WonGames field if the given value is not nil.
-func (uuo *UserUpdateOne) SetNillableWonGames(u *uint64) *UserUpdateOne {
+// SetNillableGames sets the Games field if the given value is not nil.
+func (uuo *UserUpdateOne) SetNillableGames(u *uint64) *UserUpdateOne {
 	if u != nil {
-		uuo.SetWonGames(*u)
+		uuo.SetGames(*u)
 	}
 	return uuo
 }
 
-// AddWonGames adds u to WonGames.
-func (uuo *UserUpdateOne) AddWonGames(u uint64) *UserUpdateOne {
-	uuo.mutation.AddWonGames(u)
+// AddGames adds u to Games.
+func (uuo *UserUpdateOne) AddGames(u uint64) *UserUpdateOne {
+	uuo.mutation.AddGames(u)
+	return uuo
+}
+
+// SetPoints sets the Points field.
+func (uuo *UserUpdateOne) SetPoints(u uint64) *UserUpdateOne {
+	uuo.mutation.ResetPoints()
+	uuo.mutation.SetPoints(u)
+	return uuo
+}
+
+// SetNillablePoints sets the Points field if the given value is not nil.
+func (uuo *UserUpdateOne) SetNillablePoints(u *uint64) *UserUpdateOne {
+	if u != nil {
+		uuo.SetPoints(*u)
+	}
+	return uuo
+}
+
+// AddPoints adds u to Points.
+func (uuo *UserUpdateOne) AddPoints(u uint64) *UserUpdateOne {
+	uuo.mutation.AddPoints(u)
+	return uuo
+}
+
+// SetRating sets the Rating field.
+func (uuo *UserUpdateOne) SetRating(u uint64) *UserUpdateOne {
+	uuo.mutation.ResetRating()
+	uuo.mutation.SetRating(u)
+	return uuo
+}
+
+// SetNillableRating sets the Rating field if the given value is not nil.
+func (uuo *UserUpdateOne) SetNillableRating(u *uint64) *UserUpdateOne {
+	if u != nil {
+		uuo.SetRating(*u)
+	}
+	return uuo
+}
+
+// AddRating adds u to Rating.
+func (uuo *UserUpdateOne) AddRating(u uint64) *UserUpdateOne {
+	uuo.mutation.AddRating(u)
 	return uuo
 }
 
@@ -300,18 +412,46 @@ func (uuo *UserUpdateOne) sqlSave(ctx context.Context) (_node *User, err error) 
 			Column: user.FieldDiscordID,
 		})
 	}
-	if value, ok := uuo.mutation.WonGames(); ok {
+	if value, ok := uuo.mutation.Games(); ok {
 		_spec.Fields.Set = append(_spec.Fields.Set, &sqlgraph.FieldSpec{
 			Type:   field.TypeUint64,
 			Value:  value,
-			Column: user.FieldWonGames,
+			Column: user.FieldGames,
 		})
 	}
-	if value, ok := uuo.mutation.AddedWonGames(); ok {
+	if value, ok := uuo.mutation.AddedGames(); ok {
 		_spec.Fields.Add = append(_spec.Fields.Add, &sqlgraph.FieldSpec{
 			Type:   field.TypeUint64,
 			Value:  value,
-			Column: user.FieldWonGames,
+			Column: user.FieldGames,
+		})
+	}
+	if value, ok := uuo.mutation.Points(); ok {
+		_spec.Fields.Set = append(_spec.Fields.Set, &sqlgraph.FieldSpec{
+			Type:   field.TypeUint64,
+			Value:  value,
+			Column: user.FieldPoints,
+		})
+	}
+	if value, ok := uuo.mutation.AddedPoints(); ok {
+		_spec.Fields.Add = append(_spec.Fields.Add, &sqlgraph.FieldSpec{
+			Type:   field.TypeUint64,
+			Value:  value,
+			Column: user.FieldPoints,
+		})
+	}
+	if value, ok := uuo.mutation.Rating(); ok {
+		_spec.Fields.Set = append(_spec.Fields.Set, &sqlgraph.FieldSpec{
+			Type:   field.TypeUint64,
+			Value:  value,
+			Column: user.FieldRating,
+		})
+	}
+	if value, ok := uuo.mutation.AddedRating(); ok {
+		_spec.Fields.Add = append(_spec.Fields.Add, &sqlgraph.FieldSpec{
+			Type:   field.TypeUint64,
+			Value:  value,
+			Column: user.FieldRating,
 		})
 	}
 	_node = &User{config: uuo.config}

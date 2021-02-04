@@ -2,7 +2,32 @@
 
 package runtime
 
-// The schema-stitching logic is generated in iloMusiAko/ent/runtime.go
+import (
+	"iloMusiAko/ent/schema"
+	"iloMusiAko/ent/user"
+)
+
+// The init function reads all schema descriptors with runtime code
+// (default values, validators, hooks and policies) and stitches it
+// to their package variables.
+func init() {
+	userHooks := schema.User{}.Hooks()
+	user.Hooks[0] = userHooks[0]
+	userFields := schema.User{}.Fields()
+	_ = userFields
+	// userDescGames is the schema descriptor for Games field.
+	userDescGames := userFields[1].Descriptor()
+	// user.DefaultGames holds the default value on creation for the Games field.
+	user.DefaultGames = userDescGames.Default.(uint64)
+	// userDescPoints is the schema descriptor for Points field.
+	userDescPoints := userFields[2].Descriptor()
+	// user.DefaultPoints holds the default value on creation for the Points field.
+	user.DefaultPoints = userDescPoints.Default.(uint64)
+	// userDescRating is the schema descriptor for Rating field.
+	userDescRating := userFields[3].Descriptor()
+	// user.DefaultRating holds the default value on creation for the Rating field.
+	user.DefaultRating = userDescRating.Default.(uint64)
+}
 
 const (
 	Version = "v0.5.3"                                          // Version of ent codegen.

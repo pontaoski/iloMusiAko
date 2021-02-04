@@ -33,8 +33,12 @@ type UserMutation struct {
 	id            *int
 	_DiscordID    *uint64
 	add_DiscordID *uint64
-	_WonGames     *uint64
-	add_WonGames  *uint64
+	_Games        *uint64
+	add_Games     *uint64
+	_Points       *uint64
+	add_Points    *uint64
+	_Rating       *uint64
+	add_Rating    *uint64
 	clearedFields map[string]struct{}
 	done          bool
 	oldValue      func(context.Context) (*User, error)
@@ -177,61 +181,175 @@ func (m *UserMutation) ResetDiscordID() {
 	m.add_DiscordID = nil
 }
 
-// SetWonGames sets the WonGames field.
-func (m *UserMutation) SetWonGames(u uint64) {
-	m._WonGames = &u
-	m.add_WonGames = nil
+// SetGames sets the Games field.
+func (m *UserMutation) SetGames(u uint64) {
+	m._Games = &u
+	m.add_Games = nil
 }
 
-// WonGames returns the WonGames value in the mutation.
-func (m *UserMutation) WonGames() (r uint64, exists bool) {
-	v := m._WonGames
+// Games returns the Games value in the mutation.
+func (m *UserMutation) Games() (r uint64, exists bool) {
+	v := m._Games
 	if v == nil {
 		return
 	}
 	return *v, true
 }
 
-// OldWonGames returns the old WonGames value of the User.
+// OldGames returns the old Games value of the User.
 // If the User object wasn't provided to the builder, the object is fetched
 // from the database.
 // An error is returned if the mutation operation is not UpdateOne, or database query fails.
-func (m *UserMutation) OldWonGames(ctx context.Context) (v uint64, err error) {
+func (m *UserMutation) OldGames(ctx context.Context) (v uint64, err error) {
 	if !m.op.Is(OpUpdateOne) {
-		return v, fmt.Errorf("OldWonGames is allowed only on UpdateOne operations")
+		return v, fmt.Errorf("OldGames is allowed only on UpdateOne operations")
 	}
 	if m.id == nil || m.oldValue == nil {
-		return v, fmt.Errorf("OldWonGames requires an ID field in the mutation")
+		return v, fmt.Errorf("OldGames requires an ID field in the mutation")
 	}
 	oldValue, err := m.oldValue(ctx)
 	if err != nil {
-		return v, fmt.Errorf("querying old value for OldWonGames: %w", err)
+		return v, fmt.Errorf("querying old value for OldGames: %w", err)
 	}
-	return oldValue.WonGames, nil
+	return oldValue.Games, nil
 }
 
-// AddWonGames adds u to WonGames.
-func (m *UserMutation) AddWonGames(u uint64) {
-	if m.add_WonGames != nil {
-		*m.add_WonGames += u
+// AddGames adds u to Games.
+func (m *UserMutation) AddGames(u uint64) {
+	if m.add_Games != nil {
+		*m.add_Games += u
 	} else {
-		m.add_WonGames = &u
+		m.add_Games = &u
 	}
 }
 
-// AddedWonGames returns the value that was added to the WonGames field in this mutation.
-func (m *UserMutation) AddedWonGames() (r uint64, exists bool) {
-	v := m.add_WonGames
+// AddedGames returns the value that was added to the Games field in this mutation.
+func (m *UserMutation) AddedGames() (r uint64, exists bool) {
+	v := m.add_Games
 	if v == nil {
 		return
 	}
 	return *v, true
 }
 
-// ResetWonGames reset all changes of the "WonGames" field.
-func (m *UserMutation) ResetWonGames() {
-	m._WonGames = nil
-	m.add_WonGames = nil
+// ResetGames reset all changes of the "Games" field.
+func (m *UserMutation) ResetGames() {
+	m._Games = nil
+	m.add_Games = nil
+}
+
+// SetPoints sets the Points field.
+func (m *UserMutation) SetPoints(u uint64) {
+	m._Points = &u
+	m.add_Points = nil
+}
+
+// Points returns the Points value in the mutation.
+func (m *UserMutation) Points() (r uint64, exists bool) {
+	v := m._Points
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldPoints returns the old Points value of the User.
+// If the User object wasn't provided to the builder, the object is fetched
+// from the database.
+// An error is returned if the mutation operation is not UpdateOne, or database query fails.
+func (m *UserMutation) OldPoints(ctx context.Context) (v uint64, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, fmt.Errorf("OldPoints is allowed only on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, fmt.Errorf("OldPoints requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldPoints: %w", err)
+	}
+	return oldValue.Points, nil
+}
+
+// AddPoints adds u to Points.
+func (m *UserMutation) AddPoints(u uint64) {
+	if m.add_Points != nil {
+		*m.add_Points += u
+	} else {
+		m.add_Points = &u
+	}
+}
+
+// AddedPoints returns the value that was added to the Points field in this mutation.
+func (m *UserMutation) AddedPoints() (r uint64, exists bool) {
+	v := m.add_Points
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// ResetPoints reset all changes of the "Points" field.
+func (m *UserMutation) ResetPoints() {
+	m._Points = nil
+	m.add_Points = nil
+}
+
+// SetRating sets the Rating field.
+func (m *UserMutation) SetRating(u uint64) {
+	m._Rating = &u
+	m.add_Rating = nil
+}
+
+// Rating returns the Rating value in the mutation.
+func (m *UserMutation) Rating() (r uint64, exists bool) {
+	v := m._Rating
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldRating returns the old Rating value of the User.
+// If the User object wasn't provided to the builder, the object is fetched
+// from the database.
+// An error is returned if the mutation operation is not UpdateOne, or database query fails.
+func (m *UserMutation) OldRating(ctx context.Context) (v uint64, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, fmt.Errorf("OldRating is allowed only on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, fmt.Errorf("OldRating requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldRating: %w", err)
+	}
+	return oldValue.Rating, nil
+}
+
+// AddRating adds u to Rating.
+func (m *UserMutation) AddRating(u uint64) {
+	if m.add_Rating != nil {
+		*m.add_Rating += u
+	} else {
+		m.add_Rating = &u
+	}
+}
+
+// AddedRating returns the value that was added to the Rating field in this mutation.
+func (m *UserMutation) AddedRating() (r uint64, exists bool) {
+	v := m.add_Rating
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// ResetRating reset all changes of the "Rating" field.
+func (m *UserMutation) ResetRating() {
+	m._Rating = nil
+	m.add_Rating = nil
 }
 
 // Op returns the operation name.
@@ -248,12 +366,18 @@ func (m *UserMutation) Type() string {
 // this mutation. Note that, in order to get all numeric
 // fields that were in/decremented, call AddedFields().
 func (m *UserMutation) Fields() []string {
-	fields := make([]string, 0, 2)
+	fields := make([]string, 0, 4)
 	if m._DiscordID != nil {
 		fields = append(fields, user.FieldDiscordID)
 	}
-	if m._WonGames != nil {
-		fields = append(fields, user.FieldWonGames)
+	if m._Games != nil {
+		fields = append(fields, user.FieldGames)
+	}
+	if m._Points != nil {
+		fields = append(fields, user.FieldPoints)
+	}
+	if m._Rating != nil {
+		fields = append(fields, user.FieldRating)
 	}
 	return fields
 }
@@ -265,8 +389,12 @@ func (m *UserMutation) Field(name string) (ent.Value, bool) {
 	switch name {
 	case user.FieldDiscordID:
 		return m.DiscordID()
-	case user.FieldWonGames:
-		return m.WonGames()
+	case user.FieldGames:
+		return m.Games()
+	case user.FieldPoints:
+		return m.Points()
+	case user.FieldRating:
+		return m.Rating()
 	}
 	return nil, false
 }
@@ -278,8 +406,12 @@ func (m *UserMutation) OldField(ctx context.Context, name string) (ent.Value, er
 	switch name {
 	case user.FieldDiscordID:
 		return m.OldDiscordID(ctx)
-	case user.FieldWonGames:
-		return m.OldWonGames(ctx)
+	case user.FieldGames:
+		return m.OldGames(ctx)
+	case user.FieldPoints:
+		return m.OldPoints(ctx)
+	case user.FieldRating:
+		return m.OldRating(ctx)
 	}
 	return nil, fmt.Errorf("unknown User field %s", name)
 }
@@ -296,12 +428,26 @@ func (m *UserMutation) SetField(name string, value ent.Value) error {
 		}
 		m.SetDiscordID(v)
 		return nil
-	case user.FieldWonGames:
+	case user.FieldGames:
 		v, ok := value.(uint64)
 		if !ok {
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
-		m.SetWonGames(v)
+		m.SetGames(v)
+		return nil
+	case user.FieldPoints:
+		v, ok := value.(uint64)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetPoints(v)
+		return nil
+	case user.FieldRating:
+		v, ok := value.(uint64)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetRating(v)
 		return nil
 	}
 	return fmt.Errorf("unknown User field %s", name)
@@ -314,8 +460,14 @@ func (m *UserMutation) AddedFields() []string {
 	if m.add_DiscordID != nil {
 		fields = append(fields, user.FieldDiscordID)
 	}
-	if m.add_WonGames != nil {
-		fields = append(fields, user.FieldWonGames)
+	if m.add_Games != nil {
+		fields = append(fields, user.FieldGames)
+	}
+	if m.add_Points != nil {
+		fields = append(fields, user.FieldPoints)
+	}
+	if m.add_Rating != nil {
+		fields = append(fields, user.FieldRating)
 	}
 	return fields
 }
@@ -327,8 +479,12 @@ func (m *UserMutation) AddedField(name string) (ent.Value, bool) {
 	switch name {
 	case user.FieldDiscordID:
 		return m.AddedDiscordID()
-	case user.FieldWonGames:
-		return m.AddedWonGames()
+	case user.FieldGames:
+		return m.AddedGames()
+	case user.FieldPoints:
+		return m.AddedPoints()
+	case user.FieldRating:
+		return m.AddedRating()
 	}
 	return nil, false
 }
@@ -345,12 +501,26 @@ func (m *UserMutation) AddField(name string, value ent.Value) error {
 		}
 		m.AddDiscordID(v)
 		return nil
-	case user.FieldWonGames:
+	case user.FieldGames:
 		v, ok := value.(uint64)
 		if !ok {
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
-		m.AddWonGames(v)
+		m.AddGames(v)
+		return nil
+	case user.FieldPoints:
+		v, ok := value.(uint64)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.AddPoints(v)
+		return nil
+	case user.FieldRating:
+		v, ok := value.(uint64)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.AddRating(v)
 		return nil
 	}
 	return fmt.Errorf("unknown User numeric field %s", name)
@@ -383,8 +553,14 @@ func (m *UserMutation) ResetField(name string) error {
 	case user.FieldDiscordID:
 		m.ResetDiscordID()
 		return nil
-	case user.FieldWonGames:
-		m.ResetWonGames()
+	case user.FieldGames:
+		m.ResetGames()
+		return nil
+	case user.FieldPoints:
+		m.ResetPoints()
+		return nil
+	case user.FieldRating:
+		m.ResetRating()
 		return nil
 	}
 	return fmt.Errorf("unknown User field %s", name)

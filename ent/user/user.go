@@ -2,6 +2,10 @@
 
 package user
 
+import (
+	"github.com/facebook/ent"
+)
+
 const (
 	// Label holds the string label denoting the user type in the database.
 	Label = "user"
@@ -9,8 +13,12 @@ const (
 	FieldID = "id"
 	// FieldDiscordID holds the string denoting the discordid field in the database.
 	FieldDiscordID = "discord_id"
-	// FieldWonGames holds the string denoting the wongames field in the database.
-	FieldWonGames = "won_games"
+	// FieldGames holds the string denoting the games field in the database.
+	FieldGames = "games"
+	// FieldPoints holds the string denoting the points field in the database.
+	FieldPoints = "points"
+	// FieldRating holds the string denoting the rating field in the database.
+	FieldRating = "rating"
 
 	// Table holds the table name of the user in the database.
 	Table = "users"
@@ -20,7 +28,9 @@ const (
 var Columns = []string{
 	FieldID,
 	FieldDiscordID,
-	FieldWonGames,
+	FieldGames,
+	FieldPoints,
+	FieldRating,
 }
 
 // ValidColumn reports if the column name is valid (part of the table columns).
@@ -33,7 +43,18 @@ func ValidColumn(column string) bool {
 	return false
 }
 
+// Note that the variables below are initialized by the runtime
+// package on the initialization of the application. Therefore,
+// it should be imported in the main as follows:
+//
+//	import _ "iloMusiAko/ent/runtime"
+//
 var (
-	// DefaultWonGames holds the default value on creation for the WonGames field.
-	DefaultWonGames uint64
+	Hooks [1]ent.Hook
+	// DefaultGames holds the default value on creation for the Games field.
+	DefaultGames uint64
+	// DefaultPoints holds the default value on creation for the Points field.
+	DefaultPoints uint64
+	// DefaultRating holds the default value on creation for the Rating field.
+	DefaultRating uint64
 )

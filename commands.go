@@ -52,7 +52,7 @@ outer:
 	return false
 }
 
-const duration = 70
+const duration = 20
 
 func votePhase(c *gateway.MessageCreateEvent) {
 	if c.WebhookID.IsValid() {
@@ -185,14 +185,14 @@ func leaderboard(c *gateway.MessageCreateEvent) {
 	}
 
 	users := client.User.Query().
-		Order(ent.Desc(user.FieldWonGames)).
+		Order(ent.Desc(user.FieldRating)).
 		Limit(10).
 		AllX(ctx)
 
 	sb := []string{}
 
 	for _, user := range users {
-		sb = append(sb, fmt.Sprintf("<@%d> - tenpo %d", user.DiscordID, user.WonGames))
+		sb = append(sb, fmt.Sprintf("<@%d> - tenpo %d", user.DiscordID, user.Rating))
 	}
 
 	bot.SendMessage(
@@ -308,6 +308,21 @@ func startGame(c *gateway.MessageCreateEvent) {
 				return
 			}
 
+			for submitter := range dataStates[c.ChannelID].phrases {
+				user, err := client.User.Query().Where(user.DiscordID(uint64(submitter))).Only(ctx)
+				if err != nil {
+					if _, ok := err.(*ent.NotFoundError); ok {
+						user = client.User.Create().
+							SetDiscordID(uint64(winner)).
+							SaveX(ctx)
+					} else {
+						panic(err)
+					}
+				}
+
+				user.Update().AddGames(1).SaveX(ctx)
+			}
+
 			user, err := client.User.Query().Where(user.DiscordID(uint64(winner))).Only(ctx)
 			if err != nil {
 				if _, ok := err.(*ent.NotFoundError); ok {
@@ -319,12 +334,12 @@ func startGame(c *gateway.MessageCreateEvent) {
 				}
 			}
 
-			count := user.Update().AddWonGames(1).SaveX(ctx).WonGames
+			count := user.Update().AddPoints(uint64(len(dataStates[c.ChannelID].phrases))).SaveX(ctx).Rating
 
 			if couldVotes <= votes {
-				bot.SendMessage(c.ChannelID, "", pona("", fmt.Sprintf("jan mute li wile toki pi <@%d>!\nona li toki e ni: %s.\nni li tenpo nanpa %d tawa ona.", winner, strings.Join(phraseData.phrases[winner], " "), count)))
+				bot.SendMessage(c.ChannelID, "", pona("", fmt.Sprintf("jan mute li wile toki pi <@%d>!\nona li toki e ni: %s.\nnanpa ona li %d.", winner, strings.Join(phraseData.phrases[winner], " "), count)))
 			} else {
-				bot.SendMessage(c.ChannelID, "", pona("", fmt.Sprintf("jan mute li wile toki pi <@%d>!\nona li toki e ni: %s.\nni li tenpo nanpa %d tawa ona.\ntenpo ante la <@%d> li ken pona, taso ona li toki ala e wile ona.", winner, strings.Join(phraseData.phrases[winner], " "), count, couldWinner)))
+				bot.SendMessage(c.ChannelID, "", pona("", fmt.Sprintf("jan mute li wile toki pi <@%d>!\nona li toki e ni: %s.\nnanpa ona li %d.\ntenpo ante la <@%d> li ken pona, taso ona li toki ala e wile ona.", winner, strings.Join(phraseData.phrases[winner], " "), count, couldWinner)))
 			}
 		}()
 	}()

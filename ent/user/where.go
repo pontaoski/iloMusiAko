@@ -98,10 +98,24 @@ func DiscordID(v uint64) predicate.User {
 	})
 }
 
-// WonGames applies equality check predicate on the "WonGames" field. It's identical to WonGamesEQ.
-func WonGames(v uint64) predicate.User {
+// Games applies equality check predicate on the "Games" field. It's identical to GamesEQ.
+func Games(v uint64) predicate.User {
 	return predicate.User(func(s *sql.Selector) {
-		s.Where(sql.EQ(s.C(FieldWonGames), v))
+		s.Where(sql.EQ(s.C(FieldGames), v))
+	})
+}
+
+// Points applies equality check predicate on the "Points" field. It's identical to PointsEQ.
+func Points(v uint64) predicate.User {
+	return predicate.User(func(s *sql.Selector) {
+		s.Where(sql.EQ(s.C(FieldPoints), v))
+	})
+}
+
+// Rating applies equality check predicate on the "Rating" field. It's identical to RatingEQ.
+func Rating(v uint64) predicate.User {
+	return predicate.User(func(s *sql.Selector) {
+		s.Where(sql.EQ(s.C(FieldRating), v))
 	})
 }
 
@@ -181,22 +195,22 @@ func DiscordIDLTE(v uint64) predicate.User {
 	})
 }
 
-// WonGamesEQ applies the EQ predicate on the "WonGames" field.
-func WonGamesEQ(v uint64) predicate.User {
+// GamesEQ applies the EQ predicate on the "Games" field.
+func GamesEQ(v uint64) predicate.User {
 	return predicate.User(func(s *sql.Selector) {
-		s.Where(sql.EQ(s.C(FieldWonGames), v))
+		s.Where(sql.EQ(s.C(FieldGames), v))
 	})
 }
 
-// WonGamesNEQ applies the NEQ predicate on the "WonGames" field.
-func WonGamesNEQ(v uint64) predicate.User {
+// GamesNEQ applies the NEQ predicate on the "Games" field.
+func GamesNEQ(v uint64) predicate.User {
 	return predicate.User(func(s *sql.Selector) {
-		s.Where(sql.NEQ(s.C(FieldWonGames), v))
+		s.Where(sql.NEQ(s.C(FieldGames), v))
 	})
 }
 
-// WonGamesIn applies the In predicate on the "WonGames" field.
-func WonGamesIn(vs ...uint64) predicate.User {
+// GamesIn applies the In predicate on the "Games" field.
+func GamesIn(vs ...uint64) predicate.User {
 	v := make([]interface{}, len(vs))
 	for i := range v {
 		v[i] = vs[i]
@@ -208,12 +222,12 @@ func WonGamesIn(vs ...uint64) predicate.User {
 			s.Where(sql.False())
 			return
 		}
-		s.Where(sql.In(s.C(FieldWonGames), v...))
+		s.Where(sql.In(s.C(FieldGames), v...))
 	})
 }
 
-// WonGamesNotIn applies the NotIn predicate on the "WonGames" field.
-func WonGamesNotIn(vs ...uint64) predicate.User {
+// GamesNotIn applies the NotIn predicate on the "Games" field.
+func GamesNotIn(vs ...uint64) predicate.User {
 	v := make([]interface{}, len(vs))
 	for i := range v {
 		v[i] = vs[i]
@@ -225,35 +239,187 @@ func WonGamesNotIn(vs ...uint64) predicate.User {
 			s.Where(sql.False())
 			return
 		}
-		s.Where(sql.NotIn(s.C(FieldWonGames), v...))
+		s.Where(sql.NotIn(s.C(FieldGames), v...))
 	})
 }
 
-// WonGamesGT applies the GT predicate on the "WonGames" field.
-func WonGamesGT(v uint64) predicate.User {
+// GamesGT applies the GT predicate on the "Games" field.
+func GamesGT(v uint64) predicate.User {
 	return predicate.User(func(s *sql.Selector) {
-		s.Where(sql.GT(s.C(FieldWonGames), v))
+		s.Where(sql.GT(s.C(FieldGames), v))
 	})
 }
 
-// WonGamesGTE applies the GTE predicate on the "WonGames" field.
-func WonGamesGTE(v uint64) predicate.User {
+// GamesGTE applies the GTE predicate on the "Games" field.
+func GamesGTE(v uint64) predicate.User {
 	return predicate.User(func(s *sql.Selector) {
-		s.Where(sql.GTE(s.C(FieldWonGames), v))
+		s.Where(sql.GTE(s.C(FieldGames), v))
 	})
 }
 
-// WonGamesLT applies the LT predicate on the "WonGames" field.
-func WonGamesLT(v uint64) predicate.User {
+// GamesLT applies the LT predicate on the "Games" field.
+func GamesLT(v uint64) predicate.User {
 	return predicate.User(func(s *sql.Selector) {
-		s.Where(sql.LT(s.C(FieldWonGames), v))
+		s.Where(sql.LT(s.C(FieldGames), v))
 	})
 }
 
-// WonGamesLTE applies the LTE predicate on the "WonGames" field.
-func WonGamesLTE(v uint64) predicate.User {
+// GamesLTE applies the LTE predicate on the "Games" field.
+func GamesLTE(v uint64) predicate.User {
 	return predicate.User(func(s *sql.Selector) {
-		s.Where(sql.LTE(s.C(FieldWonGames), v))
+		s.Where(sql.LTE(s.C(FieldGames), v))
+	})
+}
+
+// PointsEQ applies the EQ predicate on the "Points" field.
+func PointsEQ(v uint64) predicate.User {
+	return predicate.User(func(s *sql.Selector) {
+		s.Where(sql.EQ(s.C(FieldPoints), v))
+	})
+}
+
+// PointsNEQ applies the NEQ predicate on the "Points" field.
+func PointsNEQ(v uint64) predicate.User {
+	return predicate.User(func(s *sql.Selector) {
+		s.Where(sql.NEQ(s.C(FieldPoints), v))
+	})
+}
+
+// PointsIn applies the In predicate on the "Points" field.
+func PointsIn(vs ...uint64) predicate.User {
+	v := make([]interface{}, len(vs))
+	for i := range v {
+		v[i] = vs[i]
+	}
+	return predicate.User(func(s *sql.Selector) {
+		// if not arguments were provided, append the FALSE constants,
+		// since we can't apply "IN ()". This will make this predicate falsy.
+		if len(v) == 0 {
+			s.Where(sql.False())
+			return
+		}
+		s.Where(sql.In(s.C(FieldPoints), v...))
+	})
+}
+
+// PointsNotIn applies the NotIn predicate on the "Points" field.
+func PointsNotIn(vs ...uint64) predicate.User {
+	v := make([]interface{}, len(vs))
+	for i := range v {
+		v[i] = vs[i]
+	}
+	return predicate.User(func(s *sql.Selector) {
+		// if not arguments were provided, append the FALSE constants,
+		// since we can't apply "IN ()". This will make this predicate falsy.
+		if len(v) == 0 {
+			s.Where(sql.False())
+			return
+		}
+		s.Where(sql.NotIn(s.C(FieldPoints), v...))
+	})
+}
+
+// PointsGT applies the GT predicate on the "Points" field.
+func PointsGT(v uint64) predicate.User {
+	return predicate.User(func(s *sql.Selector) {
+		s.Where(sql.GT(s.C(FieldPoints), v))
+	})
+}
+
+// PointsGTE applies the GTE predicate on the "Points" field.
+func PointsGTE(v uint64) predicate.User {
+	return predicate.User(func(s *sql.Selector) {
+		s.Where(sql.GTE(s.C(FieldPoints), v))
+	})
+}
+
+// PointsLT applies the LT predicate on the "Points" field.
+func PointsLT(v uint64) predicate.User {
+	return predicate.User(func(s *sql.Selector) {
+		s.Where(sql.LT(s.C(FieldPoints), v))
+	})
+}
+
+// PointsLTE applies the LTE predicate on the "Points" field.
+func PointsLTE(v uint64) predicate.User {
+	return predicate.User(func(s *sql.Selector) {
+		s.Where(sql.LTE(s.C(FieldPoints), v))
+	})
+}
+
+// RatingEQ applies the EQ predicate on the "Rating" field.
+func RatingEQ(v uint64) predicate.User {
+	return predicate.User(func(s *sql.Selector) {
+		s.Where(sql.EQ(s.C(FieldRating), v))
+	})
+}
+
+// RatingNEQ applies the NEQ predicate on the "Rating" field.
+func RatingNEQ(v uint64) predicate.User {
+	return predicate.User(func(s *sql.Selector) {
+		s.Where(sql.NEQ(s.C(FieldRating), v))
+	})
+}
+
+// RatingIn applies the In predicate on the "Rating" field.
+func RatingIn(vs ...uint64) predicate.User {
+	v := make([]interface{}, len(vs))
+	for i := range v {
+		v[i] = vs[i]
+	}
+	return predicate.User(func(s *sql.Selector) {
+		// if not arguments were provided, append the FALSE constants,
+		// since we can't apply "IN ()". This will make this predicate falsy.
+		if len(v) == 0 {
+			s.Where(sql.False())
+			return
+		}
+		s.Where(sql.In(s.C(FieldRating), v...))
+	})
+}
+
+// RatingNotIn applies the NotIn predicate on the "Rating" field.
+func RatingNotIn(vs ...uint64) predicate.User {
+	v := make([]interface{}, len(vs))
+	for i := range v {
+		v[i] = vs[i]
+	}
+	return predicate.User(func(s *sql.Selector) {
+		// if not arguments were provided, append the FALSE constants,
+		// since we can't apply "IN ()". This will make this predicate falsy.
+		if len(v) == 0 {
+			s.Where(sql.False())
+			return
+		}
+		s.Where(sql.NotIn(s.C(FieldRating), v...))
+	})
+}
+
+// RatingGT applies the GT predicate on the "Rating" field.
+func RatingGT(v uint64) predicate.User {
+	return predicate.User(func(s *sql.Selector) {
+		s.Where(sql.GT(s.C(FieldRating), v))
+	})
+}
+
+// RatingGTE applies the GTE predicate on the "Rating" field.
+func RatingGTE(v uint64) predicate.User {
+	return predicate.User(func(s *sql.Selector) {
+		s.Where(sql.GTE(s.C(FieldRating), v))
+	})
+}
+
+// RatingLT applies the LT predicate on the "Rating" field.
+func RatingLT(v uint64) predicate.User {
+	return predicate.User(func(s *sql.Selector) {
+		s.Where(sql.LT(s.C(FieldRating), v))
+	})
+}
+
+// RatingLTE applies the LTE predicate on the "Rating" field.
+func RatingLTE(v uint64) predicate.User {
+	return predicate.User(func(s *sql.Selector) {
+		s.Where(sql.LTE(s.C(FieldRating), v))
 	})
 }
 

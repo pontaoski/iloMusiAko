@@ -2,19 +2,4 @@
 
 package ent
 
-import (
-	"iloMusiAko/ent/schema"
-	"iloMusiAko/ent/user"
-)
-
-// The init function reads all schema descriptors with runtime code
-// (default values, validators, hooks and policies) and stitches it
-// to their package variables.
-func init() {
-	userFields := schema.User{}.Fields()
-	_ = userFields
-	// userDescWonGames is the schema descriptor for WonGames field.
-	userDescWonGames := userFields[1].Descriptor()
-	// user.DefaultWonGames holds the default value on creation for the WonGames field.
-	user.DefaultWonGames = userDescWonGames.Default.(uint64)
-}
+// The schema-stitching logic is generated in iloMusiAko/ent/runtime/runtime.go
