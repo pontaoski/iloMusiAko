@@ -211,8 +211,8 @@ func startGame(c *gateway.MessageCreateEvent) {
 
 	rand.Seed(c.ID.Time().Unix())
 
-	if !strings.HasPrefix(c.Content, "ilo o open e musi Ako") ||
-		!strings.HasPrefix(c.Content, "ilo o Ako") {
+	if !(strings.HasPrefix(c.Content, "ilo o open e musi Ako") ||
+		strings.HasPrefix(c.Content, "ilo o Ako")) {
 		return
 	}
 
