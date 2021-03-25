@@ -7,6 +7,7 @@ var particles = map[string]struct{}{
 	"li": {},
 	"e":  {},
 	"la": {},
+	"o": {},
 	"pi": {},
 }
 
