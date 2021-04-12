@@ -295,6 +295,8 @@ func startGame(c *gateway.MessageCreateEvent) {
 		duration = dur * 1.5
 	} else if strings.Contains(c.Content, "tenpo lili") {
 		duration = dur * 0.5
+	} else if strings.Contains(c.Content, "tenpo pi lili mute") {
+		duration = dur * 0.2
 	}
 
 	if _, ok := gameStates[c.ChannelID]; ok {
