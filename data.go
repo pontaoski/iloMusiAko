@@ -7,8 +7,9 @@ var particles = map[string]struct{}{
 	"li": {},
 	"e":  {},
 	"la": {},
-	"o": {},
+	"o":  {},
 	"pi": {},
+	"a":  {},
 }
 
 func randomLetter() string {
