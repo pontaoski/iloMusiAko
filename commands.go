@@ -52,7 +52,7 @@ outer:
 	return false
 }
 
-const duration = 70
+const dur = 70
 
 func votePhase(c *gateway.MessageCreateEvent) {
 	if c.WebhookID.IsValid() {
@@ -285,9 +285,16 @@ func startGame(c *gateway.MessageCreateEvent) {
 
 	rand.Seed(c.ID.Time().Unix())
 
-	if !(strings.HasPrefix(c.Content, "ilo o open e musi Ako") ||
-		strings.HasPrefix(c.Content, "ilo o Ako")) {
+	if !(strings.Contains(c.Content, "ilo o open e musi Ako") ||
+		strings.Contains(c.Content, "ilo o Ako")) {
 		return
+	}
+
+	duration := float64(dur)
+	if strings.Contains(c.Content, "tenpo mute") {
+		duration = dur * 1.5
+	} else if strings.Contains(c.Content, "tenpo lili") {
+		duration = dur * 0.5
 	}
 
 	if _, ok := gameStates[c.ChannelID]; ok {
@@ -307,11 +314,11 @@ func startGame(c *gateway.MessageCreateEvent) {
 
 	go func() {
 		go func() {
-			time.Sleep(0.8 * duration * time.Second)
+			time.Sleep(time.Duration(0.8*duration) * time.Second)
 			bot.SendMessage(c.ChannelID, "tenpo li weka!", nil)
 		}()
 
-		time.Sleep(duration * time.Second)
+		time.Sleep(time.Duration(duration) * time.Second)
 		gameStates[c.ChannelID] = voting
 
 		if len(dataStates[c.ChannelID].phrases) == 0 {
@@ -340,11 +347,11 @@ func startGame(c *gateway.MessageCreateEvent) {
 
 		go func() {
 			go func() {
-				time.Sleep(0.8 * duration * time.Second)
+				time.Sleep(time.Duration(0.8*duration) * time.Second)
 				bot.SendMessage(c.ChannelID, "tenpo li weka!", nil)
 			}()
 
-			time.Sleep(duration * time.Second)
+			time.Sleep(time.Duration(duration) * time.Second)
 			defer delete(gameStates, c.ChannelID)
 
 			voteData := voteStates[c.ChannelID]
