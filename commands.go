@@ -126,6 +126,80 @@ func meso(title string, body string) *discord.Embed {
 	}
 }
 
+type validationState int
+
+const (
+	none validationState = iota
+	weak
+	strong
+)
+
+type validation struct {
+	letter string
+	state  validationState
+}
+
+func (v *validation) ok(s string) bool {
+	return strings.HasPrefix(strings.ToLower(s), v.letter)
+}
+
+type validations []validation
+
+func (v validations) copy() (o validations) {
+	for _, it := range v {
+		o = append(o, it)
+	}
+	return
+}
+
+func newVal(s ...string) (v validations) {
+	for _, mu := range s {
+		v = append(v, validation{
+			letter: mu,
+			state:  validationState(none),
+		})
+	}
+	return
+}
+
+func prepValidation(d discord.ChannelID) (v validations) {
+	return newVal(dataStates[d].letters...)
+}
+
+func isPart(s string) bool {
+	_, ok := particles[s]
+	return ok
+}
+
+func checksOut(s []string, v validations) bool {
+	i := 0
+	for _, let := range s {
+		if isPart(let) && i >= len(v) {
+			continue
+		} else if i >= len(v) {
+			return false
+		} else if isPart(let) && v[i].ok(let) {
+			switch v[i].state {
+			case none:
+				v[i].state = weak
+			case weak, strong:
+				continue
+			}
+		} else if v[i].ok(let) {
+			switch v[i].state {
+			case none, weak:
+				v[i].state = strong
+				i++
+			case strong:
+				return false
+			}
+		} else {
+			return false
+		}
+	}
+	return true
+}
+
 func dataPhase(c *gateway.MessageCreateEvent) {
 	if c.WebhookID.IsValid() {
 		return
@@ -137,7 +211,6 @@ func dataPhase(c *gateway.MessageCreateEvent) {
 	}
 
 	fields := strings.Fields(c.Content)
-	fieldsWithoutParticles := []string{}
 
 	if strings.ContainsRune(c.Content, '⠀') {
 		bot.SendMessage(c.ChannelID, fmt.Sprintf("<@%d> o, sitelen ni li ike MUTE a! o kepeken ALA e ona!", c.Author.ID), nil)
@@ -151,24 +224,10 @@ func dataPhase(c *gateway.MessageCreateEvent) {
 		return
 	}
 
-	for _, field := range fields {
-		if _, ok := particles[punctuationStripper.Replace(field)]; ok {
-			continue
-		}
-		fieldsWithoutParticles = append(fieldsWithoutParticles, field)
-	}
-
-	if len(fieldsWithoutParticles) != len(dataStates[c.ChannelID].letters) {
+	fieldsNoPunc := strings.Fields(punctuationStripper.Replace(c.Content))
+	v := prepValidation(c.ChannelID)
+	if !checksOut(fieldsNoPunc, v) {
 		return
-	}
-
-	for i := 0; i < len(fieldsWithoutParticles); i++ {
-		fieldsFirst := fieldsWithoutParticles[i][0:1]
-		letter := dataStates[c.ChannelID].letters[i]
-
-		if strings.ToLower(fieldsFirst) != letter {
-			return
-		}
 	}
 
 	dataStates[c.ChannelID].phrases[c.Author.ID] = fields
