@@ -20,8 +20,11 @@ func randomLength() int {
 	return rand.Intn(3) + 2
 }
 
-func randomLetters() []string {
-	length := randomLength()
+func randomLetters(tip int) []string {
+	length := randomLength() + tip
+	if length < 2 {
+		length = 2
+	}
 	arr := make([]string, length)
 	for i := 0; i < length; i++ {
 		arr[i] = randomLetter()

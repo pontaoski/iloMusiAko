@@ -290,21 +290,26 @@ func startGame(c *gateway.MessageCreateEvent) {
 		return
 	}
 
+	var data []string
+
 	duration := float64(dur)
 	if strings.Contains(c.Content, "tenpo mute") {
 		duration = dur * 1.5
+		data = randomLetters(2)
 	} else if strings.Contains(c.Content, "tenpo lili") {
 		duration = dur * 0.5
+		data = randomLetters(-1)
 	} else if strings.Contains(c.Content, "tenpo pi lili mute") {
 		duration = dur * 0.2
+		data = randomLetters(-2)
+	} else {
+		data = randomLetters(0)
 	}
 
 	if _, ok := gameStates[c.ChannelID]; ok {
 		bot.SendMessage(c.ChannelID, "musi li lon. o musi kepeken ona!", nil)
 		return
 	}
-
-	data := randomLetters()
 
 	bot.SendMessage(c.ChannelID, "", pona(fmt.Sprintf("o pana e toki kepeken open ni: `%s`", strings.Join(data, " ")), ""))
 
