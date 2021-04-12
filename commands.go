@@ -193,7 +193,14 @@ func checksOut(s []string, v validations) bool {
 			case strong:
 				return false
 			}
+		} else if isPart(let) {
+			continue
 		} else {
+			return false
+		}
+	}
+	for _, it := range v {
+		if it.state == none {
 			return false
 		}
 	}

@@ -35,4 +35,11 @@ func TestComamnds(t *testing.T) {
 	expect(t, do(v, "mi", "open", "o", "o", "o"))
 	expect(t, do(v, "mi", "open", "olin", "o"))
 
+	v = newVal("u", "u", "j")
+
+	expect(t, do(v, "unu", "li", "usawi", "e", "jan"))
+	expect(t, do(v, "uta", "unu", "li", "jami"))
+
+	NEXPCT(t, do(v, "ike", "nasa"))
+
 }
