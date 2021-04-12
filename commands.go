@@ -302,6 +302,9 @@ func startGame(c *gateway.MessageCreateEvent) {
 	} else if strings.Contains(c.Content, "tenpo pi lili mute") {
 		duration = dur * 0.2
 		data = randomLetters(-2)
+	} else if strings.Contains(c.Content, "tenpo ale") {
+		duration = 300
+		data = randomLetters(12)
 	} else {
 		data = randomLetters(0)
 	}
