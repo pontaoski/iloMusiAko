@@ -193,6 +193,14 @@ func checksOut(s []string, v validations) bool {
 			case strong:
 				return false
 			}
+		} else if i+1 < len(v) && v[i+1].ok(let) && v[i].state == weak {
+			i++
+			if isPart(let) {
+				v[i].state = weak
+			} else {
+				v[i].state = strong
+				i++
+			}
 		} else if isPart(let) {
 			continue
 		} else {

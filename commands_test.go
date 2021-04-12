@@ -42,4 +42,11 @@ func TestComamnds(t *testing.T) {
 
 	NEXPCT(t, do(v, "ike", "nasa"))
 
+	v = newVal("l", "p", "i")
+
+	expect(t, do(v, "li", "poka", "ipi"))
+
+	v = newVal("l", "o", "a")
+
+	expect(t, do(v, "li", "o", "a"))
 }
