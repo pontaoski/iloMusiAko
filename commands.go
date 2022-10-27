@@ -9,6 +9,7 @@ import (
 	"strconv"
 	"strings"
 	"time"
+    "unicode"
 
 	"github.com/diamondburned/arikawa/discord"
 	"github.com/diamondburned/arikawa/gateway"
@@ -79,7 +80,7 @@ func votePhase(c *gateway.MessageCreateEvent) {
 	}
 
 	if c.Author.ID == id {
-		bot.SendMessage(c.ChannelID, fmt.Sprintf("ike a, <@%d> li pali ike!", c.Author.ID), nil)
+		bot.SendMessage(c.ChannelID, fmt.Sprintf("ike a · <@%d> li pali ike ·", c.Author.ID), nil)
 		bot.DeleteMessage(c.ChannelID, c.ID)
 		return
 	}
@@ -90,17 +91,8 @@ func votePhase(c *gateway.MessageCreateEvent) {
 	voteStates[c.ChannelID].hasVoted[c.Author.ID] = struct{}{}
 
 	bot.DeleteMessage(c.ChannelID, c.ID)
-	bot.SendMessage(c.ChannelID, fmt.Sprintf("<@%d> li toki e wile ona!", c.Author.ID), nil)
+	bot.SendMessage(c.ChannelID, fmt.Sprintf("<@%d> li pana e wile ona ·", c.Author.ID), nil)
 }
-
-var punctuationStripper = strings.NewReplacer(
-	",", "",
-	".", "",
-	";", "",
-	":", "",
-	"!", "",
-	".", "",
-)
 
 func pona(title string, body string) *discord.Embed {
 	return &discord.Embed{
@@ -126,94 +118,153 @@ func meso(title string, body string) *discord.Embed {
 	}
 }
 
+// strips punctuation from string
+// Don’t implement Unicode folding here.
+// Only fold in the storing function, where it will be checked against others’ submissions.
+func strip (s string) string {
+    var ns string // 
+    var weka bool = true
+
+    for _, mu := range s { // mu ali la
+        if unicode.IsLetter(mu) || unicode.IsNumber(mu) {
+            if weka {
+                ns += ' ' // ken la " " li pona
+                weka = false
+            }
+            ns += string(mu)
+        } else {
+            weka = true
+        }
+    }
+    
+    // will make «nimi ‹kokosila› li ike · » into « nimi kokosila li ike»
+    // this will now be put into checksOut
+    // if it checksOut, then it will be Unicode-folded and stored
+    
+    return ns[1:] // with first space removed (is always a space)
+}
+
 type validationState int
 
 const (
-	none validationState = iota
-	weak
-	strong
+	ala validationState = iota
+	ken
+	lon
 )
 
-type validation struct {
-	letter string
-	state  validationState
+type statedWord struct {
+    word  string
+    state validationState
 }
 
-func (v *validation) ok(s string) bool {
-	return strings.HasPrefix(strings.ToLower(s), v.letter)
+var letters []string   // What do these variables do? Have I written them?
+var sentence []string  // They seem to be unused. But why does Go not raise an error for this? – jan Kasape
+
+func statedWordsFromSentence(s []string) []statedWord {
+    sw := make([]statedWord, len(s))
+    
+    for i := 0; i < len(s); i++ {
+        sw[i] = statedWord { word: s[i], state: ala, }
+    }
+    
+    return sw
 }
 
-type validations []validation
+// s = every word in the input accompanied by a ala-ken-lon state
+// l = array of original letters, e.g. {"a", "k", "o"}
+func checksOut(s []statedWord, l []string) bool {
 
-func (v validations) copy() (o validations) {
-	for _, it := range v {
-		o = append(o, it)
-	}
-	return
-}
+    var pl int = 0 // letter pointer
+    var ps int = 0 // sentence word pointer
+    
+    // returns true iff match between letters and sentence exists
+    for {
+        var es bool = ps >= len(s) // exceeded sentence pointer
+        var el bool = pl >= len(l) // exceeded letter pointer
+    
+        /* /// pointers and flags check
+        fmt.Println(pl, ps)
+        for i := 0; i < len(s); i++ {
+            fmt.Print(s[i].state, " ")
+        }
+        fmt.Println()
+        */
+        
+        if el && es {
+            return true // exceeded both? then there exists a mapping
+        }
+        
+        if !es {
+            // current word’s first letter == current letter (case-insensitive)
+            var sama bool
+            
+            // if-block in case there are particles at the end of the input
+            if el { 
+                sama = false // if exceeded, evidently can’t match
+            } else {
+                sama = strings.EqualFold(string(s[ps].word[0]), l[pl])
+            }
+            
+            var pana bool = isPart(s[ps].word) // is free word
 
-func newVal(s ...string) (v validations) {
-	for _, mu := range s {
-		v = append(v, validation{
-			letter: mu,
-			state:  validationState(none),
-		})
-	}
-	return
+            if /****/ !sama &&  pana {
+                s[ps].state = ala
+                ps++ // particle doesn’t match letter: skip particle
+                continue
+            
+            } else if  sama && !pana {
+                s[ps].state = lon
+                ps++ // matches a non-particle: has to count as letter
+                pl++
+                continue
+            
+            } else if  sama &&  pana {
+                // could be that the particle should be counted
+                // or not, so we try both; first skip the particle
+                // and then, perhaps later, count the particle
+                s[ps].state = ken
+                ps++
+                continue
+            }
+        }
+        
+        // if here: mismatch
+        // go back to the rightmost ‹ken› marker and mark as ‹lon›
+        for {
+            if pl < 0 {
+                return false
+            
+            } else if ps >= len(s) ||
+                      s[ps].state == lon ||
+                      s[ps].state == ala { // undo last action …
+                ps--
+                if ps < 0 {
+                    return false // (quick check)
+                }
+                
+                if s[ps].state == lon { // … so, if from non-particle phase
+                    pl--                // then also decrease letter pointer
+                }
+            } else if s[ps].state == ken {
+                s[ps].state = lon
+                ps++
+                pl++
+                break
+            }
+            /// fmt.Println("·", pl, ps)
+        }
+    }
 }
+/// 1
+// If both counters exceeded, then the word will be accepted.
+// If only the sentence pointer exceeded,
+// then there doesn’t exist a matching.
+// Because, since we accept particles by default,
+// the accepted sentence will always be as least as long
+// as the number of letters. Thus, if you’re in the middle
+// of a sentence, and you’ve run out of letters already,
+// a full match will never occur.
 
-func prepValidation(d discord.ChannelID) (v validations) {
-	return newVal(dataStates[d].letters...)
-}
-
-func isPart(s string) bool {
-	_, ok := particles[s]
-	return ok
-}
-
-func checksOut(s []string, v validations) bool {
-	i := 0
-	for _, let := range s {
-		if isPart(let) && i >= len(v) {
-			continue
-		} else if i >= len(v) {
-			return false
-		} else if isPart(let) && v[i].ok(let) {
-			switch v[i].state {
-			case none:
-				v[i].state = weak
-			case weak, strong:
-				continue
-			}
-		} else if v[i].ok(let) {
-			switch v[i].state {
-			case none, weak:
-				v[i].state = strong
-				i++
-			case strong:
-				return false
-			}
-		} else if i+1 < len(v) && v[i+1].ok(let) && v[i].state == weak {
-			i++
-			if isPart(let) {
-				v[i].state = weak
-			} else {
-				v[i].state = strong
-				i++
-			}
-		} else if isPart(let) {
-			continue
-		} else {
-			return false
-		}
-	}
-	for _, it := range v {
-		if it.state == none {
-			return false
-		}
-	}
-	return true
-}
 
 func dataPhase(c *gateway.MessageCreateEvent) {
 	if c.WebhookID.IsValid() {
@@ -228,7 +279,7 @@ func dataPhase(c *gateway.MessageCreateEvent) {
 	fields := strings.Fields(c.Content)
 
 	if strings.ContainsRune(c.Content, '⠀') {
-		bot.SendMessage(c.ChannelID, fmt.Sprintf("<@%d> o, sitelen ni li ike MUTE a! o kepeken ALA e ona!", c.Author.ID), nil)
+        bot.SendMessage(c.ChannelID, fmt.Sprintf("<@%d> o : sitelen ni li ike suli a · o kepeken ala ona ·", c.Author.ID), nil)
 		bot.DeleteMessage(c.ChannelID, c.ID)
 		return
 	}
@@ -239,9 +290,9 @@ func dataPhase(c *gateway.MessageCreateEvent) {
 		return
 	}
 
-	fieldsNoPunc := strings.Fields(punctuationStripper.Replace(c.Content))
-	v := prepValidation(c.ChannelID)
-	if !checksOut(fieldsNoPunc, v) {
+	s := statedWordsFromSentence(strip(c.Content)) // should work if c.Content is a string
+	l := dataStates[c.ChannelID].letters
+	if !checksOut(s, l) {
 		return
 	}
 
