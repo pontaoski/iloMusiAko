@@ -179,6 +179,11 @@ func statedWordsFromSentence(s []string) []statedWord {
     return sw
 }
 
+func isPart(s string) bool {
+	_, ok := particles[s]
+	return ok
+}
+
 // s = every word in the input accompanied by a ala-ken-lon state
 // l = array of original letters, e.g. {"a", "k", "o"}
 func checksOut(s []statedWord, l []string) bool {
@@ -332,7 +337,7 @@ func leaderboard(c *gateway.MessageCreateEvent) {
 	bot.SendMessage(
 		c.ChannelID, "",
 		pona(
-			"jan mute la jan ni li suli :",
+			"jan li pona lon tenpo pi mute ni :",
 			strings.Join(sb, "\n"),
 		),
 	)
@@ -353,21 +358,17 @@ func startGame(c *gateway.MessageCreateEvent) {
 	var data []string
 
 	duration := float64(dur)
-	if strings.Contains(c.Content, "tenpo mute") {
-		duration = dur * 1.5
+	if strings.Contains(c.Content, "sin wan") {
+		data = randomLetters(1)
+	} else if strings.Contains(c.Content, "sin tu") {
 		data = randomLetters(2)
-	} else if strings.Contains(c.Content, "tenpo lili") {
-		duration = dur * 0.5
-		data = randomLetters(-1)
-	} else if strings.Contains(c.Content, "tenpo pi lili mute") {
-		duration = dur * 0.2
-		data = randomLetters(-2)
-	} else if strings.Contains(c.Content, "tenpo ale") {
-		duration = 300
-		data = randomLetters(12)
+	} else if strings.Contains(c.Content, "sin mute") {
+		data = randomLetters(3)
 	} else {
 		data = randomLetters(0)
 	}
+    
+    duration = len(data) * 15 // 15 seconds per letter
 
 	if _, ok := gameStates[c.ChannelID]; ok {
 		bot.SendMessage(c.ChannelID, "tomo ni la musi li lon a · o musi lon ona ·", nil)
