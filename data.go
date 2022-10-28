@@ -2,16 +2,7 @@ package main
 
 import "math/rand"
 // import "fmt"   // for testing
-// import "time"
-
-var particles = map[string]struct{} {
-	"li": {},
-	"e":  {},
-	"la": {},
-	"o":  {},
-	"pi": {},
-	"en": {},
-}
+// import "time"  //
 
 // kiwen — lon musi la sitelen ‹.› li kama weka
 
