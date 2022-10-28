@@ -144,6 +144,15 @@ func strip (s string) string {
     return ns[1:] // with first space removed (is always a space)
 }
 
+var particles = map[string]struct{}{
+	"la": {},
+	"li": {},
+	"o" : {},
+	"en": {},
+	"e" : {},
+	"pi": {},
+}
+
 type validationState int
 
 const (
