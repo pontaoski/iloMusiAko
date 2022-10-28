@@ -42,7 +42,7 @@ func randomLetters(nNamako int) []string {
 
     /// o kama jo e mu tan kiwen suli
     for k := 0; k < len(kiwenSuli); k++ { // k = kiwen
-        rand.Seed(time.Now().UTC().UnixNano())
+        // rand.Seed(time.Now().UTC().UnixNano()) // will be done in commands.go, although here is probably better
         m := string(kiwenSuli[k][rand.Intn(nPoka)]) // roll one die
         if m != "." { // if not ‹.›: add;
             mu = append(mu, m)
